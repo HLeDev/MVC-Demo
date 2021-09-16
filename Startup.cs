@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Mod3Demo
 {
@@ -29,6 +31,28 @@ namespace Mod3Demo
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            //use default html
+            //app.UseDefaultFiles();
+            //comment default file
+
+            //providing different options for default files, clear whatever you have and add Hello HTML
+            DefaultFilesOptions defaults = new DefaultFilesOptions();
+            defaults.DefaultFileNames.Clear();
+            defaults.DefaultFileNames.Add("Hello.html");
+            app.UseDefaultFiles(defaults);
+
+            //use static files for html
+            app.UseStaticFiles();
+
+            //using new staticfileoptions
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles")),
+                RequestPath = "/StaticFiles"
+            }); ;
+
+
             //using mvc with default route
             app.UseMvcWithDefaultRoute();
 
